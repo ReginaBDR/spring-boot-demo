@@ -12,11 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Service Implementation for managing {@link com.goal.demo.domain.Contact}.
@@ -57,34 +53,6 @@ public class ContactServiceImpl implements ContactService {
     public Page<ContactDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Contacts");
         return contactRepository.findAll(pageable).map(contactMapper::toDto);
-    }
-
-    /**
-     *  Get all the contacts where Project is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<ContactDTO> findAllWhereProjectIsNull() {
-        log.debug("Request to get all contacts where Project is null");
-        return StreamSupport
-            .stream(contactRepository.findAll().spliterator(), false)
-            .filter(contact -> contact.getProject() == null)
-            .map(contactMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     *  Get all the contacts where Progress is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<ContactDTO> findAllWhereProgressIsNull() {
-        log.debug("Request to get all contacts where Progress is null");
-        return StreamSupport
-            .stream(contactRepository.findAll().spliterator(), false)
-            .filter(contact -> contact.getProgress() == null)
-            .map(contactMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

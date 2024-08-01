@@ -4,7 +4,6 @@ import com.goal.demo.service.dto.ContactDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,19 +33,6 @@ public interface ContactService {
      * @return the list of entities.
      */
     Page<ContactDTO> findAll(Pageable pageable);
-
-    /**
-     * Get all the ContactDTO where Project is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<ContactDTO> findAllWhereProjectIsNull();
-    /**
-     * Get all the ContactDTO where Progress is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<ContactDTO> findAllWhereProgressIsNull();
 
     /**
      * Get the "id" contact.
