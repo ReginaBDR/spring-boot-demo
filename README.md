@@ -32,8 +32,10 @@ To launch the application's tests, run:
 ./gradlew test
 ```
 
+## API Documentation
 
+To access the Api documentation in dev environment:
 
-## Data schema
-
-![Data squema](data-schema.png 'Data squema')
+```
+http://localhost:8080/swagger-ui/index.html
+```

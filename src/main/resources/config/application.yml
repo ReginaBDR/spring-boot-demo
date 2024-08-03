@@ -3,8 +3,12 @@ spring:
     activate:
       on-profile: '!api-docs'
 springdoc:
+  show-actuator: true
+  swagger-ui:
+    path: /swagger-ui.html
   api-docs:
-    enabled: false
+    enabled: true
+    path: /api-docs
 ---
 management:
   endpoints:
@@ -129,9 +133,6 @@ server:
     session:
       cookie:
         http-only: true
-
-springdoc:
-  show-actuator: true
 
 logging:
   level:
