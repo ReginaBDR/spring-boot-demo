@@ -1,6 +1,5 @@
 package com.goal.demo.service;
 
-import com.goal.demo.service.dto.ProgressAuditedDTO;
 import com.goal.demo.service.dto.ProgressDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +33,7 @@ public interface ProgressService {
      * @param projectId the project of the entity.
      * @return the list of entities.
      */
-    Page<ProgressAuditedDTO> findAll(Pageable pageable, Long projectId);
+    Page<ProgressDTO> findAll(Pageable pageable, Long projectId);
 
     /**
      * Get the "id" progress.
@@ -43,14 +42,6 @@ public interface ProgressService {
      * @return the entity.
      */
     Optional<ProgressDTO> findOne(Long id);
-
-    /**
-     * Get the "id" progress.
-     *
-     * @param id the id of the entity.
-     * @return the entity with Audited fields.
-     */
-    Optional<ProgressAuditedDTO> findOneWithAudit(Long id);
 
     /**
      * Delete the "id" progress.

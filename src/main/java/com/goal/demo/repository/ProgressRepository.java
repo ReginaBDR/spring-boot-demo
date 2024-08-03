@@ -16,9 +16,6 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 @Repository
 public interface ProgressRepository extends JpaRepository<Progress, Long> {
-    @Query(value = "SELECT * FROM progress p WHERE p.id = :progressId", nativeQuery = true)
-    Optional<Progress> findProgressByIdWithAudit(@Param("progressId") Long progressId);
-
     @Query(value = "SELECT * FROM progress p WHERE p.project_id = :projectId", nativeQuery = true)
-    Page<Progress> findAllProgressesByProjectIdWithAudit(Pageable pageable, @Param("projectId") Long projectId);
+    Page<Progress> findAllByProjectId(Pageable pageable, @Param("projectId") Long projectId);
 }
