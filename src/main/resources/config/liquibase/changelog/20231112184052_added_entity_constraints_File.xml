@@ -15,11 +15,5 @@
                                  referencedTableName="project"
                                  />
 
-        <addForeignKeyConstraint baseColumnNames="progress_id"
-                                 baseTableName="file"
-                                 constraintName="fk_file__progress_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="progress"
-                                 />
     </changeSet>
 </databaseChangeLog>

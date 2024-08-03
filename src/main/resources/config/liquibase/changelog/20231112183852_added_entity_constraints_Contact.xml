@@ -8,11 +8,11 @@
     -->
     <changeSet id="20231112183852-2" author="admin">
 
-        <addForeignKeyConstraint baseColumnNames="customer_id"
-                                 baseTableName="project"
-                                 constraintName="fk_project__customer_id"
+        <addForeignKeyConstraint baseColumnNames="project_id"
+                                 baseTableName="contact"
+                                 constraintName="fk_contact__project_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="contact"
-                                 />
+                                 referencedTableName="project"
+        />
     </changeSet>
 </databaseChangeLog>

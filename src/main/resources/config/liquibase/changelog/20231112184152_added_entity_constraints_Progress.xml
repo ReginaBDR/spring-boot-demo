@@ -8,13 +8,6 @@
     -->
     <changeSet id="20231112184152-2" author="admin">
 
-        <addForeignKeyConstraint baseColumnNames="contact_id"
-                                 baseTableName="progress"
-                                 constraintName="fk_progress__contact_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="contact"
-                                 />
-
         <addForeignKeyConstraint baseColumnNames="project_id"
                                  baseTableName="progress"
                                  constraintName="fk_progress__project_id"

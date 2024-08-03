@@ -15,7 +15,7 @@
     <include file="config/liquibase/changelog/20231112183952_added_entity_Contact.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231112184052_added_entity_File.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231112184152_added_entity_Progress.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20231112183852_added_entity_constraints_Project.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231112183852_added_entity_constraints_Contact.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231112184052_added_entity_constraints_File.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231112184152_added_entity_constraints_Progress.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
