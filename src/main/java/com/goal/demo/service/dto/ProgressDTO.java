@@ -1,5 +1,7 @@
 package com.goal.demo.service.dto;
 
+import com.goal.demo.domain.AbstractAuditingEntity;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,7 +9,7 @@ import java.util.Objects;
  * A DTO for the {@link com.goal.demo.domain.Progress} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class ProgressDTO implements Serializable {
+public class ProgressDTO extends AbstractAuditingEntity implements Serializable {
 
     private Long id;
 
@@ -15,9 +17,7 @@ public class ProgressDTO implements Serializable {
 
     private String link;
 
-    private ContactDTO contact;
-
-    private ProjectDTO project;
+    private Long projectId;
 
     public Long getId() {
         return id;
@@ -43,21 +43,9 @@ public class ProgressDTO implements Serializable {
         this.link = link;
     }
 
-    public ContactDTO getContact() {
-        return contact;
-    }
+    public Long getProjectId() {return projectId;}
 
-    public void setContact(ContactDTO contact) {
-        this.contact = contact;
-    }
-
-    public ProjectDTO getProject() {
-        return project;
-    }
-
-    public void setProject(ProjectDTO project) {
-        this.project = project;
-    }
+    public void setProjectId(Long projectId) {this.projectId = projectId;}
 
     @Override
     public boolean equals(Object o) {
@@ -83,11 +71,10 @@ public class ProgressDTO implements Serializable {
     @Override
     public String toString() {
         return "ProgressDTO{" +
-            "id=" + getId() +
-            ", notes='" + getNotes() + "'" +
-            ", link='" + getLink() + "'" +
-            ", contact=" + getContact() +
-            ", project=" + getProject() +
-            "}";
+                "id=" + id +
+                ", notes='" + notes + '\'' +
+                ", link='" + link + '\'' +
+                ", projectId='" + projectId + '\'' +
+                '}';
     }
 }

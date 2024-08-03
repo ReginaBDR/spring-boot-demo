@@ -27,6 +27,8 @@ public class ContactDTO implements Serializable {
 
     private String notes;
 
+    private Long projectId;
+
     public Long getId() {
         return id;
     }
@@ -99,6 +101,10 @@ public class ContactDTO implements Serializable {
         this.notes = notes;
     }
 
+    public Long getProjectId() {return projectId;}
+
+    public void setProjectId(Long projectId) {this.projectId = projectId;}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -123,15 +129,16 @@ public class ContactDTO implements Serializable {
     @Override
     public String toString() {
         return "ContactDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", lastName='" + getLastName() + "'" +
-            ", company='" + getCompany() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", phone=" + getPhone() +
-            ", email='" + getEmail() + "'" +
-            ", role='" + getRole() + "'" +
-            ", notes='" + getNotes() + "'" +
-            "}";
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", company='" + company + '\'' +
+                ", address='" + address + '\'' +
+                ", phone=" + phone +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", notes='" + notes + '\'' +
+                ", projectId='" + projectId + '\'' +
+                '}';
     }
 }

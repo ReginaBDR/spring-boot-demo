@@ -32,8 +32,6 @@ public class ProjectDTO implements Serializable {
 
     private ProjectStatus status;
 
-    private ContactDTO customer;
-
     public Long getId() {
         return id;
     }
@@ -114,14 +112,6 @@ public class ProjectDTO implements Serializable {
         this.status = status;
     }
 
-    public ContactDTO getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(ContactDTO customer) {
-        this.customer = customer;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -156,7 +146,6 @@ public class ProjectDTO implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", deadline='" + getDeadline() + "'" +
             ", status='" + getStatus() + "'" +
-            ", customer=" + getCustomer() +
             "}";
     }
 }

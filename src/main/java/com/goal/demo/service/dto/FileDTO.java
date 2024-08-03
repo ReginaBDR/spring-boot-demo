@@ -3,6 +3,7 @@ package com.goal.demo.service.dto;
 import jakarta.persistence.Lob;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -19,11 +20,10 @@ public class FileDTO implements Serializable {
     private byte[] file;
 
     private String fileContentType;
+
     private String description;
 
-    private ProjectDTO project;
-
-    private ProgressDTO progress;
+    private Long projectId;
 
     public FileDTO(String s, String baseName) {
     }
@@ -71,21 +71,9 @@ public class FileDTO implements Serializable {
         this.description = description;
     }
 
-    public ProjectDTO getProject() {
-        return project;
-    }
+    public Long getProjectId() {return projectId;}
 
-    public void setProject(ProjectDTO project) {
-        this.project = project;
-    }
-
-    public ProgressDTO getProgress() {
-        return progress;
-    }
-
-    public void setProgress(ProgressDTO progress) {
-        this.progress = progress;
-    }
+    public void setProjectId(Long projectId) {this.projectId = projectId;}
 
     @Override
     public boolean equals(Object o) {
@@ -111,12 +99,12 @@ public class FileDTO implements Serializable {
     @Override
     public String toString() {
         return "FileDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", file='" + getFile() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", project=" + getProject() +
-            ", progress=" + getProgress() +
-            "}";
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", file=" + Arrays.toString(file) +
+                ", fileContentType='" + fileContentType + '\'' +
+                ", description='" + description + '\'' +
+                ", projectId='" + projectId + '\'' +
+                '}';
     }
 }
