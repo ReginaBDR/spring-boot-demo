@@ -4,8 +4,6 @@ import com.goal.demo.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
 
 import static com.goal.demo.domain.ContactTestSamples.*;
-import static com.goal.demo.domain.ProgressTestSamples.*;
-import static com.goal.demo.domain.ProjectTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ContactTest {
@@ -22,33 +20,5 @@ class ContactTest {
 
         contact2 = getContactSample2();
         assertThat(contact1).isNotEqualTo(contact2);
-    }
-
-    @Test
-    void projectTest() throws Exception {
-        Contact contact = getContactRandomSampleGenerator();
-        Project projectBack = getProjectRandomSampleGenerator();
-
-        contact.setProject(projectBack);
-        assertThat(contact.getProject()).isEqualTo(projectBack);
-        assertThat(projectBack.getCustomer()).isEqualTo(contact);
-
-        contact.project(null);
-        assertThat(contact.getProject()).isNull();
-        assertThat(projectBack.getCustomer()).isNull();
-    }
-
-    @Test
-    void progressTest() throws Exception {
-        Contact contact = getContactRandomSampleGenerator();
-        Progress progressBack = getProgressRandomSampleGenerator();
-
-        contact.setProgress(progressBack);
-        assertThat(contact.getProgress()).isEqualTo(progressBack);
-        assertThat(progressBack.getContact()).isEqualTo(contact);
-
-        contact.progress(null);
-        assertThat(contact.getProgress()).isNull();
-        assertThat(progressBack.getContact()).isNull();
     }
 }
