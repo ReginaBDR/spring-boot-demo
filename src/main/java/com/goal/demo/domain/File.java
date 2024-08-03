@@ -1,11 +1,11 @@
 package com.goal.demo.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * A File.
@@ -37,13 +37,8 @@ public class File implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "customer" }, allowSetters = true)
-    private Project project;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "contact", "project" }, allowSetters = true)
-    private Progress progress;
+    @Column(name = "project_id")
+    private Long projectId;
 
     public Long getId() {
         return this.id;
@@ -110,29 +105,16 @@ public class File implements Serializable {
         this.description = description;
     }
 
-    public Project getProject() {
-        return this.project;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
-    public File project(Project project) {
-        this.setProject(project);
-        return this;
-    }
-
-    public Progress getProgress() {
-        return this.progress;
-    }
-
-    public void setProgress(Progress progress) {
-        this.progress = progress;
-    }
-
-    public File progress(Progress progress) {
-        this.setProgress(progress);
+    public File projectId(Long projectId) {
+        this.projectId = projectId;
         return this;
     }
 
@@ -155,11 +137,12 @@ public class File implements Serializable {
     @Override
     public String toString() {
         return "File{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", file='" + getFile() + "'" +
-            ", fileContentType='" + getFileContentType() + "'" +
-            ", description='" + getDescription() + "'" +
-            "}";
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", file=" + Arrays.toString(file) +
+                ", fileContentType='" + fileContentType + '\'' +
+                ", description='" + description + '\'' +
+                ", projectId=" + projectId +
+                '}';
     }
 }

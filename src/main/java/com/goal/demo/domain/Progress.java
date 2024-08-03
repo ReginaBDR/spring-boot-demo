@@ -1,6 +1,5 @@
 package com.goal.demo.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -32,14 +31,8 @@ public class Progress extends AbstractAuditingEntity<Long> implements Serializab
     @Column(name = "link")
     private String link;
 
-    @JsonIgnoreProperties(value = { "project", "progress" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    private Contact contact;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "customer" }, allowSetters = true)
-    private Project project;
+    @Column(name = "project_id")
+    private Long projectId;
 
     public Long getId() {
         return this.id;
@@ -80,29 +73,16 @@ public class Progress extends AbstractAuditingEntity<Long> implements Serializab
         this.link = link;
     }
 
-    public Contact getContact() {
-        return this.contact;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
-    public Progress contact(Contact contact) {
-        this.setContact(contact);
-        return this;
-    }
-
-    public Project getProject() {
-        return this.project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    public Progress project(Project project) {
-        this.setProject(project);
+    public Progress projectId(Long projectId) {
+        this.projectId = projectId;
         return this;
     }
 
@@ -125,9 +105,10 @@ public class Progress extends AbstractAuditingEntity<Long> implements Serializab
     @Override
     public String toString() {
         return "Progress{" +
-            "id=" + getId() +
-            ", notes='" + getNotes() + "'" +
-            ", link='" + getLink() + "'" +
-            "}";
+                "id=" + id +
+                ", notes='" + notes + '\'' +
+                ", link='" + link + '\'' +
+                ", projectId=" + projectId +
+                '}';
     }
 }

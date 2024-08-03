@@ -1,7 +1,6 @@
 package com.goal.demo.domain;
 
 import com.goal.demo.domain.enumeration.ProjectStatus;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -53,11 +52,6 @@ public class Project implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ProjectStatus status;
-
-    @JsonIgnoreProperties(value = { "project", "progress" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    private Contact customer;
 
     public Long getId() {
         return this.id;
@@ -187,19 +181,6 @@ public class Project implements Serializable {
 
     public void setStatus(ProjectStatus status) {
         this.status = status;
-    }
-
-    public Contact getCustomer() {
-        return this.customer;
-    }
-
-    public void setCustomer(Contact contact) {
-        this.customer = contact;
-    }
-
-    public Project customer(Contact contact) {
-        this.setCustomer(contact);
-        return this;
     }
 
     @Override

@@ -48,13 +48,8 @@ public class Contact implements Serializable {
     @Column(name = "notes")
     private String notes;
 
-    @JsonIgnoreProperties(value = { "customer" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer")
-    private Project project;
-
-    @JsonIgnoreProperties(value = { "contact", "project" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "contact")
-    private Progress progress;
+    @Column(name = "project_id")
+    private Long projectId;
 
     public Long getId() {
         return this.id;
@@ -173,41 +168,16 @@ public class Contact implements Serializable {
         this.notes = notes;
     }
 
-    public Project getProject() {
-        return this.project;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setProject(Project project) {
-        if (this.project != null) {
-            this.project.setCustomer(null);
-        }
-        if (project != null) {
-            project.setCustomer(this);
-        }
-        this.project = project;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
-    public Contact project(Project project) {
-        this.setProject(project);
-        return this;
-    }
-
-    public Progress getProgress() {
-        return this.progress;
-    }
-
-    public void setProgress(Progress progress) {
-        if (this.progress != null) {
-            this.progress.setContact(null);
-        }
-        if (progress != null) {
-            progress.setContact(this);
-        }
-        this.progress = progress;
-    }
-
-    public Contact progress(Progress progress) {
-        this.setProgress(progress);
+    public Contact projectId(Long projectId) {
+        this.projectId = projectId;
         return this;
     }
 
@@ -230,15 +200,16 @@ public class Contact implements Serializable {
     @Override
     public String toString() {
         return "Contact{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", lastName='" + getLastName() + "'" +
-            ", company='" + getCompany() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", phone=" + getPhone() +
-            ", email='" + getEmail() + "'" +
-            ", role='" + getRole() + "'" +
-            ", notes='" + getNotes() + "'" +
-            "}";
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", company='" + company + '\'' +
+                ", address='" + address + '\'' +
+                ", phone=" + phone +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", notes='" + notes + '\'' +
+                ", projectId=" + projectId +
+                '}';
     }
 }
