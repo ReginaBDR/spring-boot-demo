@@ -1,6 +1,8 @@
 package com.goal.demo.web.rest;
 
-import com.goal.demo.IntegrationTest;
+import com.goal.demo.DemoApplication;
+import com.goal.demo.config.AsyncSyncConfiguration;
+import com.goal.demo.config.EmbeddedSQL;
 import com.goal.demo.domain.Contact;
 import com.goal.demo.repository.ContactRepository;
 import com.goal.demo.service.dto.ContactDTO;
@@ -10,7 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link ContactResource} REST controller.
  */
-@IntegrationTest
+@SpringBootTest(classes = { DemoApplication.class, AsyncSyncConfiguration.class })
+@EmbeddedSQL
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @AutoConfigureMockMvc
 class ContactResourceIT {
 

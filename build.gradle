@@ -57,7 +57,6 @@ tasks.named('test') {
 
 test {
 	useJUnitPlatform()
-	exclude "**/*IT*", "**/*IntTest*"
 	testLogging {
 		events 'FAILED', 'SKIPPED'
 	}
