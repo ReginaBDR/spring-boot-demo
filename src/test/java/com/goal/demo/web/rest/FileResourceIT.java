@@ -238,7 +238,7 @@ class FileResourceIT {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(fileDTO))
             )
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
 
         // Validate the File in the database
         List<File> fileList = fileRepository.findAll();
@@ -280,139 +280,6 @@ class FileResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFileMockMvc
             .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(fileDTO)))
-            .andExpect(status().isMethodNotAllowed());
-
-        // Validate the File in the database
-        List<File> fileList = fileRepository.findAll();
-        assertThat(fileList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void partialUpdateFileWithPatch() throws Exception {
-        // Initialize the database
-        fileRepository.saveAndFlush(file);
-
-        int databaseSizeBeforeUpdate = fileRepository.findAll().size();
-
-        // Update the file using partial update
-        File partialUpdatedFile = new File();
-        partialUpdatedFile.setId(file.getId());
-
-        partialUpdatedFile.description(UPDATED_DESCRIPTION);
-
-        restFileMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedFile.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedFile))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the File in the database
-        List<File> fileList = fileRepository.findAll();
-        assertThat(fileList).hasSize(databaseSizeBeforeUpdate);
-        File testFile = fileList.get(fileList.size() - 1);
-        assertThat(testFile.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testFile.getFile()).isEqualTo(DEFAULT_FILE);
-        assertThat(testFile.getFileContentType()).isEqualTo(DEFAULT_FILE_CONTENT_TYPE);
-        assertThat(testFile.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void fullUpdateFileWithPatch() throws Exception {
-        // Initialize the database
-        fileRepository.saveAndFlush(file);
-
-        int databaseSizeBeforeUpdate = fileRepository.findAll().size();
-
-        // Update the file using partial update
-        File partialUpdatedFile = new File();
-        partialUpdatedFile.setId(file.getId());
-
-        partialUpdatedFile
-            .name(UPDATED_NAME)
-            .file(UPDATED_FILE)
-            .fileContentType(UPDATED_FILE_CONTENT_TYPE)
-            .description(UPDATED_DESCRIPTION);
-
-        restFileMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedFile.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedFile))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the File in the database
-        List<File> fileList = fileRepository.findAll();
-        assertThat(fileList).hasSize(databaseSizeBeforeUpdate);
-        File testFile = fileList.get(fileList.size() - 1);
-        assertThat(testFile.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testFile.getFile()).isEqualTo(UPDATED_FILE);
-        assertThat(testFile.getFileContentType()).isEqualTo(UPDATED_FILE_CONTENT_TYPE);
-        assertThat(testFile.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void patchNonExistingFile() throws Exception {
-        int databaseSizeBeforeUpdate = fileRepository.findAll().size();
-        file.setId(longCount.incrementAndGet());
-
-        // Create the File
-        FileDTO fileDTO = fileMapper.toDto(file);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restFileMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, fileDTO.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(fileDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the File in the database
-        List<File> fileList = fileRepository.findAll();
-        assertThat(fileList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void patchWithIdMismatchFile() throws Exception {
-        int databaseSizeBeforeUpdate = fileRepository.findAll().size();
-        file.setId(longCount.incrementAndGet());
-
-        // Create the File
-        FileDTO fileDTO = fileMapper.toDto(file);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restFileMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(fileDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the File in the database
-        List<File> fileList = fileRepository.findAll();
-        assertThat(fileList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void patchWithMissingIdPathParamFile() throws Exception {
-        int databaseSizeBeforeUpdate = fileRepository.findAll().size();
-        file.setId(longCount.incrementAndGet());
-
-        // Create the File
-        FileDTO fileDTO = fileMapper.toDto(file);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restFileMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(fileDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the File in the database

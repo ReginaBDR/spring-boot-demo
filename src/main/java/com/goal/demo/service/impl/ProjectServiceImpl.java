@@ -4,6 +4,8 @@ import com.goal.demo.domain.Project;
 import com.goal.demo.repository.ProjectRepository;
 import com.goal.demo.service.ProjectService;
 import com.goal.demo.service.dto.ProjectDTO;
+import com.goal.demo.service.impl.exception.BadRequestException;
+import com.goal.demo.service.impl.exception.NotFoundException;
 import com.goal.demo.service.mapper.ProjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDTO save(ProjectDTO projectDTO) {
         log.debug("Request to save Project : {}", projectDTO);
+        if (projectDTO.getId() != null) {
+            throw new BadRequestException("A new project cannot already have an ID");
+        }
+
         Project project = projectMapper.toEntity(projectDTO);
         project = projectRepository.save(project);
         return projectMapper.toDto(project);
@@ -43,6 +49,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDTO update(ProjectDTO projectDTO) {
         log.debug("Request to update Project : {}", projectDTO);
+        if (projectDTO.getId() == null) {
+            throw new BadRequestException("Invalid id");
+        }
+        if (!projectRepository.existsById(projectDTO.getId())) {
+            throw new NotFoundException("Entity not found");
+        }
+
         Project project = projectMapper.toEntity(projectDTO);
         project = projectRepository.save(project);
         return projectMapper.toDto(project);

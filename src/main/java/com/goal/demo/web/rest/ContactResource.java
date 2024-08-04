@@ -2,6 +2,7 @@ package com.goal.demo.web.rest;
 
 import com.goal.demo.service.ContactService;
 import com.goal.demo.service.dto.ContactDTO;
+import com.goal.demo.service.impl.exception.BadRequestException;
 import com.goal.demo.web.rest.utils.HeaderUtil;
 import com.goal.demo.web.rest.utils.PaginationUtil;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -69,6 +71,10 @@ public class ContactResource {
     public ResponseEntity<ContactDTO> updateContact(@PathVariable(value = "id", required = false) final Long id,
         @RequestBody ContactDTO contactDTO
     ) throws URISyntaxException {
+        log.debug("REST request to update File : {}, {}", id, contactDTO);
+        if (!Objects.equals(id, contactDTO.getId())) {
+            throw new BadRequestException("Invalid ID");
+        }
         ContactDTO result = contactService.update(contactDTO);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, ENTITY_NAME, contactDTO.getId().toString()))

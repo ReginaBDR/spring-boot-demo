@@ -4,6 +4,8 @@ import com.goal.demo.domain.File;
 import com.goal.demo.repository.FileRepository;
 import com.goal.demo.service.FileService;
 import com.goal.demo.service.dto.FileDTO;
+import com.goal.demo.service.impl.exception.BadRequestException;
+import com.goal.demo.service.impl.exception.NotFoundException;
 import com.goal.demo.service.mapper.FileMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -31,6 +35,10 @@ public class FileServiceImpl implements FileService {
     @Override
     public FileDTO save(FileDTO fileDTO) {
         log.debug("Request to save File : {}", fileDTO);
+        if (fileDTO.getId() != null) {
+            throw new BadRequestException("A new file cannot already have an ID");
+        }
+
         File file = fileMapper.toEntity(fileDTO);
         file = fileRepository.save(file);
         return fileMapper.toDto(file);
@@ -39,6 +47,13 @@ public class FileServiceImpl implements FileService {
     @Override
     public FileDTO update(FileDTO fileDTO) {
         log.debug("Request to update File : {}", fileDTO);
+        if (fileDTO.getId() == null) {
+            throw new BadRequestException("Invalid id");
+        }
+        if (!fileRepository.existsById(fileDTO.getId())) {
+            throw new NotFoundException("Entity not found");
+        }
+
         File file = fileMapper.toEntity(fileDTO);
         file = fileRepository.save(file);
         return fileMapper.toDto(file);

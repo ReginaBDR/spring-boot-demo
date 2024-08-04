@@ -18,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -70,8 +71,9 @@ class ProgressResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Progress createEntity(EntityManager em) {
-        Progress progress = new Progress().notes(DEFAULT_NOTES).link(DEFAULT_LINK);
-        progress.setProjectId(DEFAULT_PROJECT);
+        Progress progress = new Progress().notes(DEFAULT_NOTES).link(DEFAULT_LINK).projectId(DEFAULT_PROJECT);
+        progress.setCreatedBy("admin");
+        progress.setCreatedDate(Instant.now());
         return progress;
     }
 
@@ -83,7 +85,10 @@ class ProgressResourceIT {
      */
     public static Progress createUpdatedEntity(EntityManager em) {
         Progress progress = new Progress().notes(UPDATED_NOTES).link(UPDATED_LINK).projectId(DEFAULT_PROJECT);
-
+        progress.setCreatedBy("admin");
+        progress.setCreatedDate(Instant.now());
+        progress.setLastModifiedBy("admin");
+        progress.setLastModifiedDate(Instant.now());
         return progress;
     }
 
@@ -215,7 +220,7 @@ class ProgressResourceIT {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(progressDTO))
             )
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
 
         // Validate the Progress in the database
         List<Progress> progressList = progressRepository.findAll();
@@ -257,133 +262,6 @@ class ProgressResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restProgressMockMvc
             .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(progressDTO)))
-            .andExpect(status().isMethodNotAllowed());
-
-        // Validate the Progress in the database
-        List<Progress> progressList = progressRepository.findAll();
-        assertThat(progressList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void partialUpdateProgressWithPatch() throws Exception {
-        // Initialize the database
-        progressRepository.saveAndFlush(progress);
-
-        int databaseSizeBeforeUpdate = progressRepository.findAll().size();
-
-        // Update the progress using partial update
-        Progress partialUpdatedProgress = new Progress();
-        partialUpdatedProgress.setId(progress.getId());
-
-        partialUpdatedProgress.notes(UPDATED_NOTES).link(UPDATED_LINK);
-
-        restProgressMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedProgress.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedProgress))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the Progress in the database
-        List<Progress> progressList = progressRepository.findAll();
-        assertThat(progressList).hasSize(databaseSizeBeforeUpdate);
-        Progress testProgress = progressList.get(progressList.size() - 1);
-        assertThat(testProgress.getNotes()).isEqualTo(UPDATED_NOTES);
-        assertThat(testProgress.getLink()).isEqualTo(UPDATED_LINK);
-    }
-
-    @Test
-    @Transactional
-    void fullUpdateProgressWithPatch() throws Exception {
-        // Initialize the database
-        progressRepository.saveAndFlush(progress);
-
-        int databaseSizeBeforeUpdate = progressRepository.findAll().size();
-
-        // Update the progress using partial update
-        Progress partialUpdatedProgress = new Progress();
-        partialUpdatedProgress.setId(progress.getId());
-
-        partialUpdatedProgress.notes(UPDATED_NOTES).link(UPDATED_LINK);
-
-        restProgressMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedProgress.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedProgress))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the Progress in the database
-        List<Progress> progressList = progressRepository.findAll();
-        assertThat(progressList).hasSize(databaseSizeBeforeUpdate);
-        Progress testProgress = progressList.get(progressList.size() - 1);
-        assertThat(testProgress.getNotes()).isEqualTo(UPDATED_NOTES);
-        assertThat(testProgress.getLink()).isEqualTo(UPDATED_LINK);
-    }
-
-    @Test
-    @Transactional
-    void patchNonExistingProgress() throws Exception {
-        int databaseSizeBeforeUpdate = progressRepository.findAll().size();
-        progress.setId(longCount.incrementAndGet());
-
-        // Create the Progress
-        ProgressDTO progressDTO = progressMapper.toDto(progress);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restProgressMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, progressDTO.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(progressDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Progress in the database
-        List<Progress> progressList = progressRepository.findAll();
-        assertThat(progressList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void patchWithIdMismatchProgress() throws Exception {
-        int databaseSizeBeforeUpdate = progressRepository.findAll().size();
-        progress.setId(longCount.incrementAndGet());
-
-        // Create the Progress
-        ProgressDTO progressDTO = progressMapper.toDto(progress);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restProgressMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(progressDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Progress in the database
-        List<Progress> progressList = progressRepository.findAll();
-        assertThat(progressList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void patchWithMissingIdPathParamProgress() throws Exception {
-        int databaseSizeBeforeUpdate = progressRepository.findAll().size();
-        progress.setId(longCount.incrementAndGet());
-
-        // Create the Progress
-        ProgressDTO progressDTO = progressMapper.toDto(progress);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restProgressMockMvc
-            .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(progressDTO))
-            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Progress in the database

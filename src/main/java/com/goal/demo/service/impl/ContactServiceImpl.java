@@ -4,6 +4,8 @@ import com.goal.demo.domain.Contact;
 import com.goal.demo.repository.ContactRepository;
 import com.goal.demo.service.ContactService;
 import com.goal.demo.service.dto.ContactDTO;
+import com.goal.demo.service.impl.exception.BadRequestException;
+import com.goal.demo.service.impl.exception.NotFoundException;
 import com.goal.demo.service.mapper.ContactMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,10 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDTO save(ContactDTO contactDTO) {
         log.debug("Request to save Contact : {}", contactDTO);
+        if (contactDTO.getId() != null) {
+            throw new BadRequestException("A new contact cannot already have an ID");
+        }
+
         Contact contact = contactMapper.toEntity(contactDTO);
         contact = contactRepository.save(contact);
         return contactMapper.toDto(contact);
@@ -43,6 +49,13 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDTO update(ContactDTO contactDTO) {
         log.debug("Request to update Contact : {}", contactDTO);
+        if (contactDTO.getId() == null) {
+            throw new BadRequestException("Invalid id");
+        }
+        if (!contactRepository.existsById(contactDTO.getId())) {
+            throw new NotFoundException("Entity not found");
+        }
+
         Contact contact = contactMapper.toEntity(contactDTO);
         contact = contactRepository.save(contact);
         return contactMapper.toDto(contact);

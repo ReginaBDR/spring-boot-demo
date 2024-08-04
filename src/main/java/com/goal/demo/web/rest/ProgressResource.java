@@ -2,6 +2,7 @@ package com.goal.demo.web.rest;
 
 import com.goal.demo.service.ProgressService;
 import com.goal.demo.service.dto.ProgressDTO;
+import com.goal.demo.service.impl.exception.BadRequestException;
 import com.goal.demo.web.rest.utils.HeaderUtil;
 import com.goal.demo.web.rest.utils.PaginationUtil;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -72,6 +74,9 @@ public class ProgressResource {
         @RequestBody ProgressDTO progressDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Progress : {}, {}", id, progressDTO);
+        if (!Objects.equals(id, progressDTO.getId())) {
+            throw new BadRequestException("Invalid ID");
+        }
         ProgressDTO result = progressService.update(progressDTO);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, ENTITY_NAME, progressDTO.getId().toString()))

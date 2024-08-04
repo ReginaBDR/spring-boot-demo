@@ -2,6 +2,7 @@ package com.goal.demo.web.rest;
 
 import com.goal.demo.service.ProjectService;
 import com.goal.demo.service.dto.ProjectDTO;
+import com.goal.demo.service.impl.exception.BadRequestException;
 import com.goal.demo.web.rest.utils.HeaderUtil;
 import com.goal.demo.web.rest.utils.PaginationUtil;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -72,6 +74,9 @@ public class ProjectResource {
         @RequestBody ProjectDTO projectDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Project : {}, {}", id, projectDTO);
+        if (!Objects.equals(id, projectDTO.getId())) {
+            throw new BadRequestException("Invalid ID");
+        }
         ProjectDTO result = projectService.update(projectDTO);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, ENTITY_NAME, projectDTO.getId().toString()))

@@ -2,6 +2,7 @@ package com.goal.demo.web.rest;
 
 import com.goal.demo.service.FileService;
 import com.goal.demo.service.dto.FileDTO;
+import com.goal.demo.service.impl.exception.BadRequestException;
 import com.goal.demo.web.rest.utils.HeaderUtil;
 import com.goal.demo.web.rest.utils.PaginationUtil;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -71,6 +73,9 @@ public class FileResource {
     public ResponseEntity<FileDTO> updateFile(@PathVariable(value = "id", required = false) final Long id, @RequestBody FileDTO fileDTO)
         throws URISyntaxException {
         log.debug("REST request to update File : {}, {}", id, fileDTO);
+        if (!Objects.equals(id, fileDTO.getId())) {
+            throw new BadRequestException("Invalid ID");
+        }
         FileDTO result = fileService.update(fileDTO);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, ENTITY_NAME, fileDTO.getId().toString()))
