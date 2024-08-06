@@ -1,5 +1,12 @@
 # Demo Application
 
+This project is created using Spring Boot 3.3, with the following features:
+ - Java version 17.
+ - Postgresql as database.
+ - Docker compose.
+ - Liquibase for incremental migrations.
+ - JUnit, MockMvc and testcontainers for testing.
+
 ## Development
 
 To start the application run the following command in the terminal

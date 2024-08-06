@@ -9,7 +9,7 @@ import java.util.Objects;
  * A DTO for the {@link com.goal.demo.domain.Progress} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class ProgressDTO extends AbstractAuditingEntity implements Serializable {
+public class ProgressDTO implements Serializable {
 
     private Long id;
 
